@@ -27,10 +27,10 @@ def get_embeddings():
 
 def get_llm():
     """Retorna o modelo LLM baseado na variável de ambiente setada."""
-    if os.environ.get("OPENAI_API_KEY"):
-        # Defaulting to a standard text gen model, gpt-4o-mini is best for simple queries
-        return ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    elif os.environ.get("GOOGLE_API_KEY"):
+    #if os.environ.get("OPENAI_API_KEY"):
+    # Defaulting to a standard text gen model, gpt-4o-mini is best for simple queries
+    #    return ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    if os.environ.get("GOOGLE_API_KEY"):
         return ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)
     else:
         raise ValueError(
@@ -40,7 +40,7 @@ def get_llm():
 def get_vector_store():
     """Retorna a instância do PGVector conectada ao banco."""
     connection = os.environ.get(
-        "DATABASE_URL", "postgresql+psycopg://postgres:postgres@localhost:5432/rag")
+        "DATABASE_URL", "postgresql+psycopg://postgres:postgres@localhost:5434/rag")
     collection_name = os.environ.get(
         "PG_VECTOR_COLLECTION_NAME", "rag_collection")
     embeddings = get_embeddings()
