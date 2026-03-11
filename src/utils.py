@@ -1,9 +1,14 @@
 import os
+import warnings
 from dotenv import load_dotenv
 
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_google_vertexai import VertexAIEmbeddings, ChatVertexAI
 from langchain_postgres import PGVector
+
+# Suprime os avisos de depreciação do LangChain para manter o CLI limpo
+from langchain_core._api import LangChainDeprecationWarning
+warnings.filterwarnings("ignore", category=LangChainDeprecationWarning)
 
 load_dotenv()
 
@@ -16,7 +21,8 @@ def get_embeddings():
     #    return OpenAIEmbeddings(model=model)
     if os.environ.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
         model = os.environ.get("GOOGLE_EMBEDDING_MODEL", "text-embedding-004")
-        return VertexAIEmbeddings(model_name=model)
+        project = os.environ.get("GOOGLE_CLOUD_PROJECT", "mba-ia")
+        return VertexAIEmbeddings(model_name=model, project=project)
     else:
         raise ValueError(
             "Nenhuma chave de API encontrada ou credentials do gcloud. Preencha o arquivo .env ou faça login gcloud.")
@@ -25,7 +31,8 @@ def get_embeddings():
 def get_llm():
     """Retorna o modelo LLM baseado na variável de ambiente setada."""
     if os.environ.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
-        return ChatVertexAI(model="gemini-1.5-flash-002", temperature=0)
+        project = os.environ.get("GOOGLE_CLOUD_PROJECT", "mba-ia")
+        return ChatVertexAI(model="gemini-1.5-flash-002", temperature=0, project=project)
     else:
         raise ValueError(
             "Nenhuma chave de API encontrada ou credentials do gcloud. Preencha o arquivo .env ou faça login gcloud.")
