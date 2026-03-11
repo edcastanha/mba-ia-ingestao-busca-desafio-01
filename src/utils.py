@@ -10,13 +10,15 @@ load_dotenv()
 
 def get_embeddings():
     """Retorna a classe de embeddings baseada na variável de ambiente setada."""
-    if os.environ.get("OPENAI_API_KEY"):
-        model = os.environ.get("OPENAI_EMBEDDING_MODEL",
-                               "text-embedding-3-small")
-        return OpenAIEmbeddings(model=model)
-    elif os.environ.get("GOOGLE_API_KEY"):
+    #if os.environ.get("OPENAI_API_KEY"):
+    #    model = os.environ.get("OPENAI_EMBEDDING_MODEL",
+    #                           "text-embedding-3-small")
+    #    return OpenAIEmbeddings(model=model)
+    if os.environ.get("GOOGLE_API_KEY"):
         model = os.environ.get("GOOGLE_EMBEDDING_MODEL",
-                               "models/text-embedding-004")
+                               "models/gemini-embedding-001")
+        if model == "models/text-embedding-004":
+            model = "models/gemini-embedding-001"
         return GoogleGenerativeAIEmbeddings(model=model)
     else:
         raise ValueError(
