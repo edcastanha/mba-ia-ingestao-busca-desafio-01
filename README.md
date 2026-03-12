@@ -77,3 +77,66 @@ Se a pergunta não constar no arquivo PDF, a aplicação é instruída a retorna
 > **"Não tenho informações necessárias para responder sua pergunta."**
 
 Digite `sair` para finalizar o chat.
+
+
+Este projeto é uma aplicação de linha de comando (CLI) que realiza Ingestão de PDF em um banco de dados vetorial (PostgreSQL + pgVector) e permite realizar buscas semânticas (Retrieval-Augmented Generation) com base exclusiva no conteúdo do arquivo inserido.
+
+Tecnologias Utilizadas
+Linguagem: Python 3.12+ (gerenciado via uv)
+Framework: LangChain
+Banco de Dados: PostgreSQL com extensão pgVector
+Modelos: Suporte nativo para OpenAI e Google Gemini
+Infraestrutura: Docker e Docker Compose
+Estrutura do Projeto
+├── docker-compose.yml    # Sobe o banco PostgreSQL com pgVector
+├── requirements.txt      # Dependências exportadas do projeto
+├── pyproject.toml        # Configurações do projeto gerenciadas via uv
+├── .env.example          # Template para as chaves de API
+├── src/
+│   ├── ingest.py         # Script de ingestão do PDF (divisão e vetorização)
+│   ├── search.py         # Script autônomo de busca semântica (k=10)
+│   ├── chat.py           # CLI para interação de P&R restrita
+├── document.pdf          # PDF que servirá como base de conhecimento
+└── README.md             # Instruções de execução
+Ordem de Execução e Setup
+1. Criar e Ativar Ambiente Virtual
+Recomendamos o uso do uv (já inicializado no projeto) ou venv padrão:
+
+Usando venv clássico:
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+Usando uv (rápido):
+
+uv pip install -r requirements.txt
+2. Configurar Variáveis de Ambiente
+Copie o arquivo de exemplo do .env e insira sua chave da OpenAI ou Google:
+
+cp .env.example .env
+Edite .env e defina apenas a chave que pretende usar (OPENAI_API_KEY ou GOOGLE_API_KEY). A string de conexão do banco DATABASE_URL já está configurada por padrão na porta 5432.
+
+3. Subir o Banco de Dados
+docker compose up -d
+Aguarde alguns segundos para o banco iniciar e criar os contêineres corretamente.
+
+4. Executar a Ingestão do Arquivo PDF
+Certifique-se de que existe um arquivo document.pdf na raiz do projeto.
+
+python src/ingest.py
+(Ou, se usar uv diretamente: uv run python src/ingest.py)
+
+5. Iniciar o Chat via CLI
+python src/chat.py
+(Ou, se usar uv diretamente: uv run python src/chat.py)
+
+Faça suas perguntas baseadas no texto que você enviou. Se a pergunta não constar no arquivo PDF, a aplicação é instruída a retornar estritamente a mensagem:
+
+"Não tenho informações necessárias para responder sua pergunta."
+
+Digite sair para finalizar o chat.
+
+================================  ENV para Ollama ===============================
+# OLLAMA configuration (Local Models)
+OLLAMA_MODEL="llama3.1"
+OLLAMA_BASE_URL="http://localhost:11434"
