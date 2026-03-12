@@ -77,3 +77,17 @@ Se a pergunta não constar no arquivo PDF, a aplicação é instruída a retorna
 > **"Não tenho informações necessárias para responder sua pergunta."**
 
 Digite `sair` para finalizar o chat.
+
+---
+
+## 🚀 Explorando LLMs Locais (Branch `dev-ollama`)
+
+Nós estamos testando o uso de modelos locais através do **Ollama** com suporte a **GPU local** na branch `dev-ollama`.
+Isso permite executar a aplicação RAG (ingestão, vetorização e chat) de forma totalmente offline e privada, aproveitando a aceleração de hardware local para inferência em vez de depender de APIs através da nuvem (como OpenAI ou Google Gemini).
+
+Para conferir e testar o uso com Ollama:
+```bash
+git checkout dev-ollama
+```
+
+> **Nota:** Consulte as instruções do README na própria branch `dev-ollama` para mais detalhes de como proceder com a instalação do Ollama, download do modelo local e execução.
