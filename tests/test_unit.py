@@ -1,33 +1,37 @@
-from search import search_context
-from utils import get_embeddings, get_llm
 import os
+import sys
 import pytest
 from unittest.mock import patch, MagicMock
 
-import sys
 sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../src')))
 
+from search import search_context  # noqa
+from utils import get_embeddings, get_llm  # noqa
+
 
 @patch.dict(os.environ, {"GOOGLE_API_KEY": "fake_key"}, clear=True)
-@patch('utils.VertexAIEmbeddings')
-def test_get_embeddings_google(mock_vertex_ai):
+@patch('utils.GoogleGenerativeAIEmbeddings')
+def test_get_embeddings_google(mock_google_ai):
     embeddings = get_embeddings()
-    mock_vertex_ai.assert_called_once()
+    mock_google_ai.assert_called_once()
     assert embeddings is not None
 
 
 @patch.dict(os.environ, {"GOOGLE_API_KEY": "fake_key"}, clear=True)
-@patch('utils.ChatVertexAI')
-def test_get_llm_google(mock_chat_vertex_ai):
+@patch('utils.ChatGoogleGenerativeAI')
+def test_get_llm_google(mock_chat_google_ai):
     llm = get_llm()
-    mock_chat_vertex_ai.assert_called_once()
+    mock_chat_google_ai.assert_called_once()
     assert llm is not None
 
 
 @patch.dict(os.environ, {}, clear=True)
 def test_get_embeddings_no_key():
-    with pytest.raises(ValueError, match="Nenhuma chave de API encontrada ou credentials do gcloud."):
+    with pytest.raises(
+            ValueError,
+            match=r"Nenhuma chave de API \(OPENAI_API_KEY, GOOGLE_API_KEY\) ou OLLAMA_MODEL foi encontrada\."
+    ):
         get_embeddings()
 
 

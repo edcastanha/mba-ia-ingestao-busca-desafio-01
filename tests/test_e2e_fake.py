@@ -1,12 +1,13 @@
-from chat import main
 import os
+import sys
 import pytest
 from unittest.mock import patch, MagicMock
 from io import StringIO
-import sys
 
 sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../src')))
+
+from chat import main  # noqa
 
 
 @patch('chat.get_llm')
