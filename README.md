@@ -88,6 +88,7 @@ Banco de Dados: PostgreSQL com extensão pgVector
 Modelos: Suporte nativo para OpenAI e Google Gemini
 Infraestrutura: Docker e Docker Compose
 Estrutura do Projeto
+```text
 ├── docker-compose.yml    # Sobe o banco PostgreSQL com pgVector
 ├── requirements.txt      # Dependências exportadas do projeto
 ├── pyproject.toml        # Configurações do projeto gerenciadas via uv
@@ -98,6 +99,7 @@ Estrutura do Projeto
 │   ├── chat.py           # CLI para interação de P&R restrita
 ├── document.pdf          # PDF que servirá como base de conhecimento
 └── README.md             # Instruções de execução
+```
 Ordem de Execução e Setup
 1. Criar e Ativar Ambiente Virtual
 Recomendamos o uso do uv (já inicializado no projeto) ou venv padrão:
@@ -136,7 +138,25 @@ Faça suas perguntas baseadas no texto que você enviou. Se a pergunta não cons
 
 Digite sair para finalizar o chat.
 
-================================  ENV para Ollama ===============================
+# EXTRA BRANCH dev-ollama ===============================
+
+*Nota: Estamos testando LLMs locais (Ollama com suporte a GPU) na branch `dev-ollama`. Confira para rodar inferências offline!*
+```text
 # OLLAMA configuration (Local Models)
 OLLAMA_MODEL="llama3.1"
 OLLAMA_BASE_URL="http://localhost:11434"
+```
+---
+
+## Documentação Oficial (MkDocs)
+
+Para demonstrar o uso do MkDocs e ler o manual detalhado com as arquiteturas do projeto:
+**Inicie o servidor embutido do MkDocs:**
+   ```bash
+   mkdocs serve -a 127.0.0.1:8001
+   ```
+
+3. **Acesse no seu navegador:**
+   [http://127.0.0.1:8001/](http://127.0.0.1:8001/)
+
+> Ao iniciar `mkdocs serve`, os arquivos do diretório `docs/` são gerados "on-the-fly" convertendo Markdown em um layout elegante via navegador. Teste você também!
