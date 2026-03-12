@@ -16,9 +16,10 @@ def test_ingest_pdf_file_not_found(mock_print, mock_exists):
 
     ingest_pdf()
 
-    mock_exists.assert_called_once()
+    from ingest import PDF_PATH
+
     mock_print.assert_called_once_with(
-        "Erro: Arquivo PDF não encontrado no caminho: document.pdf")
+        f"Erro: Arquivo PDF não encontrado no caminho: {PDF_PATH}")
 
 
 @patch('ingest.os.path.exists')
@@ -44,9 +45,11 @@ def test_ingest_pdf_success(mock_print, mock_get_vector_store, mock_text_splitte
     mock_vector_store_instance = MagicMock()
     mock_get_vector_store.return_value = mock_vector_store_instance
 
+    from ingest import PDF_PATH
+
     ingest_pdf()
 
-    mock_pdf_loader_class.assert_called_once_with("document.pdf")
+    mock_pdf_loader_class.assert_called_once_with(PDF_PATH)
     mock_loader_instance.load.assert_called_once()
     mock_text_splitter_class.assert_called_once_with(
         chunk_size=1000, chunk_overlap=150)

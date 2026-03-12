@@ -35,6 +35,38 @@ def test_get_embeddings_no_key():
         get_embeddings()
 
 
+@patch.dict(os.environ, {"OPENAI_API_KEY": "fake_key"}, clear=True)
+@patch('utils.OpenAIEmbeddings')
+def test_get_embeddings_openai(mock_openai):
+    embeddings = get_embeddings()
+    mock_openai.assert_called_once()
+    assert embeddings is not None
+
+
+@patch.dict(os.environ, {"OPENAI_API_KEY": "fake_key"}, clear=True)
+@patch('utils.ChatOpenAI')
+def test_get_llm_openai(mock_chat_openai):
+    llm = get_llm()
+    mock_chat_openai.assert_called_once()
+    assert llm is not None
+
+
+@patch.dict(os.environ, {"OLLAMA_MODEL": "llama-fake"}, clear=True)
+@patch('utils.OllamaEmbeddings')
+def test_get_embeddings_ollama(mock_ollama):
+    embeddings = get_embeddings()
+    mock_ollama.assert_called_once()
+    assert embeddings is not None
+
+
+@patch.dict(os.environ, {"OLLAMA_MODEL": "llama-fake"}, clear=True)
+@patch('utils.ChatOllama')
+def test_get_llm_ollama(mock_chat_ollama):
+    llm = get_llm()
+    mock_chat_ollama.assert_called_once()
+    assert llm is not None
+
+
 @patch('search.get_vector_store')
 def test_search_context(mock_get_vector_store):
     # Mock Document
