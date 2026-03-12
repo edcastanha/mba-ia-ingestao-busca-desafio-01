@@ -19,6 +19,7 @@ services:
 
   bootstrap_vector_ext:
     image: pgvector/pgvector:pg17
+    container_name: bootstrap_vector_ext
     depends_on:
       postgres:
         condition: service_healthy
