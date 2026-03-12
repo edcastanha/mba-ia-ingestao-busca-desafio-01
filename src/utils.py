@@ -7,8 +7,7 @@ from langchain_google_genai import (
     GoogleGenerativeAIEmbeddings,
     ChatGoogleGenerativeAI,
 )
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_postgres import PGVector
 
 # Suprime os avisos de depreciação do LangChain para manter o CLI limpo
