@@ -60,7 +60,7 @@ def get_llm():
 
 
 def get_vector_store():
-    """Retorna a instância do PGVector conectada ao banco."""
+    """Retorna a instância do PGVector conectada ao banco. Nao recomendado usar em produção."""
     connection = os.environ.get("DATABASE_URL") or (
         "postgresql+psycopg://postgres:postgres@localhost:5434/rag"
     )
