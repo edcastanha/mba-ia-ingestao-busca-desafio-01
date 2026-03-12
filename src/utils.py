@@ -7,6 +7,8 @@ from langchain_google_genai import (
     GoogleGenerativeAIEmbeddings,
     ChatGoogleGenerativeAI,
 )
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.chat_models import ChatOllama
 from langchain_postgres import PGVector
 
 # Suprime os avisos de depreciação do LangChain para manter o CLI limpo
@@ -26,10 +28,15 @@ def get_embeddings():
         model = os.environ.get("GOOGLE_EMBEDDING_MODEL",
                                "models/text-embedding-004")
         return GoogleGenerativeAIEmbeddings(model=model)
+    elif os.environ.get("OLLAMA_MODEL"):
+        model = os.environ.get("OLLAMA_MODEL")
+        base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+        return OllamaEmbeddings(model=model, base_url=base_url)
     else:
         raise ValueError(
-            "Nenhuma chave de API (OPENAI_API_KEY ou GOOGLE_API_KEY) "
-            "foi encontrada. Preencha o arquivo .env adequadamente."
+            "Nenhuma chave de API (OPENAI_API_KEY, GOOGLE_API_KEY) ou "
+            "OLLAMA_MODEL foi encontrada. Preencha o arquivo .env "
+            "adequadamente."
         )
 
 
@@ -41,10 +48,15 @@ def get_llm():
     elif os.environ.get("GOOGLE_API_KEY"):
         model = os.environ.get("GOOGLE_MODEL_NAME", "gemini-1.5-flash")
         return ChatGoogleGenerativeAI(model=model, temperature=0)
+    elif os.environ.get("OLLAMA_MODEL"):
+        model = os.environ.get("OLLAMA_MODEL")
+        base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+        return ChatOllama(model=model, temperature=0, base_url=base_url)
     else:
         raise ValueError(
-            "Nenhuma chave de API (OPENAI_API_KEY ou GOOGLE_API_KEY) "
-            "foi encontrada. Preencha o arquivo .env adequadamente."
+            "Nenhuma chave de API (OPENAI_API_KEY, GOOGLE_API_KEY) ou "
+            "OLLAMA_MODEL foi encontrada. Preencha o arquivo .env "
+            "adequadamente."
         )
 
 

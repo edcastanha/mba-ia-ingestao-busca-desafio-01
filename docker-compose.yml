@@ -27,5 +27,22 @@ services:
       PGPASSWORD=postgres psql "postgresql://postgres@postgres:5432/rag" -v ON_ERROR_STOP=1 -c "CREATE EXTENSION IF NOT EXISTS vector;"
     restart: "no"
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_rag
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  ollama_data:
