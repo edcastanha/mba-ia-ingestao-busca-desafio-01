@@ -61,12 +61,12 @@ def get_llm():
 
 def get_vector_store():
     """Retorna a instância do PGVector conectada ao banco."""
-    connection = os.environ.get(
-        "DATABASE_URL",
+    connection = os.environ.get("DATABASE_URL") or (
         "postgresql+psycopg://postgres:postgres@localhost:5434/rag"
     )
-    collection_name = os.environ.get(
-        "PG_VECTOR_COLLECTION_NAME", "rag_collection")
+    collection_name = (
+        os.environ.get("PG_VECTOR_COLLECTION_NAME") or "rag_collection"
+    )
     embeddings = get_embeddings()
 
     return PGVector(
